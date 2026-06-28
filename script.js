@@ -253,15 +253,7 @@ function weatherCodeToText(code) {
             return "Unknown";
 
     }
-<div id="forecast">
 
-    <h2>5-Day Forecast</h2>
-
-    <div id="forecastContainer">
-
-    </div>
-
-</div>
 }// ==========================
 // Dynamic Background
 // ==========================
