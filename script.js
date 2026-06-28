@@ -4,6 +4,7 @@
 // ==========================
 
 // Elements
+const forecastContainer = document.getElementById("forecastContainer");
 const cityInput = document.getElementById("cityInput");
 const searchBtn = document.getElementById("searchBtn");
 const locationBtn = document.getElementById("locationBtn");
@@ -146,7 +147,7 @@ async function getWeatherByCoordinates(latitude, longitude, cityName, countryNam
     try {
 
         const weatherResponse = await fetch(
-            `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current=temperature_2m,relative_humidity_2m,weather_code,wind_speed_10m`
+            `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current=temperature_2m,relative_humidity_2m,weather_code,wind_speed_10m&daily=weather_code,temperature_2m_max,temperature_2m_min&forecast_days=5`
         );
 
         const weatherData = await weatherResponse.json();
@@ -168,6 +169,7 @@ async function getWeatherByCoordinates(latitude, longitude, cityName, countryNam
     weatherCodeToText(weatherData.current.weather_code);
 
 updateBackground(weatherData.current.weather_code);
+displayForecast(weatherData.daily);
 showMessage("Weather updated successfully!", "success");
 loading.style.display = "none";
 weatherResult.style.display = "block";
@@ -366,5 +368,41 @@ function showMessage(text, type){
     message.textContent = text;
 
     message.className = type;
+
+}// ==========================
+// Display Forecast
+// ==========================
+
+function displayForecast(daily){
+
+    forecastContainer.innerHTML = "";
+
+    for(let i = 0; i < daily.time.length; i++){
+
+        const date = new Date(daily.time[i]);
+
+        const day = date.toLocaleDateString("en-US",{
+            weekday:"short"
+        });
+
+        const icon = getWeatherIcon(daily.weather_code[i]);
+
+        forecastContainer.innerHTML += `
+
+        <div class="forecast-card">
+
+            <h4>${day}</h4>
+
+            <p style="font-size:30px;">
+                ${icon}
+            </p>
+
+            <p>${daily.temperature_2m_max[i]}° / ${daily.temperature_2m_min[i]}°</p>
+
+        </div>
+
+        `;
+
+    }
 
 }
