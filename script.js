@@ -4,6 +4,7 @@
 // ==========================
 
 // Elements
+const lastUpdated = document.getElementById("lastUpdated");
 const forecastContainer = document.getElementById("forecastContainer");
 const cityInput = document.getElementById("cityInput");
 const searchBtn = document.getElementById("searchBtn");
@@ -167,6 +168,12 @@ async function getWeatherByCoordinates(latitude, longitude, cityName, countryNam
     getWeatherIcon(weatherData.current.weather_code) +
     " " +
     weatherCodeToText(weatherData.current.weather_code);
+    const now = new Date();
+
+lastUpdated.textContent = now.toLocaleTimeString([], {
+    hour: "2-digit",
+    minute: "2-digit"
+});
 
 updateBackground(weatherData.current.weather_code);
 displayForecast(weatherData.daily);
